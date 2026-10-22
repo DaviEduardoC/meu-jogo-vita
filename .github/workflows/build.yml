@@ -1,0 +1,23 @@
+name: Build PS Vita VPK
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: vitasdk/vitasdk:latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Compile VPK
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: Upload VPK
+        uses: actions/upload-artifact@v3
+        with:
+          name: jogo-psvita
+          path: build/*.vpk
