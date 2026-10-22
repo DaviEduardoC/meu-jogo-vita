@@ -1,23 +1,29 @@
-name: Build PS Vita VPK
+name: Criar VPK para PS Vita
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [ "principal", "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: vitasdk/vitasdk:latest
-    steps:
-      - uses: actions/checkout@v3
+    container:
+      image: vitasdk/vitasdk:latest
 
-      - name: Compile VPK
+    steps:
+      - name: Baixar codigo fonte
+        uses: actions/checkout@v4
+
+      - name: Compilar VPK
         run: |
-          mkdir build
+          mkdir -p build
           cd build
           cmake ..
           make
 
-      - name: Upload VPK
-        uses: actions/upload-artifact@v3
+      - name: Enviar VPK como Artefato
+        uses: actions/upload-artifact@v4
         with:
           name: jogo-psvita
           path: build/*.vpk
