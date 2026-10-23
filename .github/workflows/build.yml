@@ -15,8 +15,9 @@ jobs:
       - name: Baixar codigo fonte
         uses: actions/checkout@v4
 
-      - name: Instalar dependencias VitaSDK
+      - name: Atualizar e Instalar dependencias VitaSDK
         run: |
+          vdpm update
           vdpm vitaGL || true
           vdpm vitashark || true
           vdpm mathneon || true
