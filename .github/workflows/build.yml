@@ -15,11 +15,17 @@ jobs:
       - name: Baixar codigo fonte
         uses: actions/checkout@v4
 
+      - name: Instalar dependencias
+        run: |
+          pacman -Syu --noconfirm vitasdk-vitagl || true
+
       - name: Compilar VPK
         run: |
+          export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           mkdir -p build
           cd build
-          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/local/vitasdk/share/vita.toolchain.cmake ..
+          cmake -DCMAKE_TOOLCHAIN_FILE=$VITASDK/share/vita.toolchain.cmake ..
           make
 
       - name: Enviar VPK como Artefato
