@@ -59,7 +59,7 @@ set(VITA_REQUIRED_LIBS
     SceAppMgr_stub
     SceCommonDialog_stub
     SceSysmodule_stub
-    SceDmacMgr_stub
+    SceKernelDmacMgr_stub
 )
 
 foreach(lib IN LISTS VITA_REQUIRED_LIBS)
