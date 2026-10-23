@@ -7,13 +7,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: vitasdk/vitasdk:latest
 
     steps:
       - name: Baixar codigo fonte
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Compilar VPK
         run: |
@@ -23,7 +23,7 @@ jobs:
           make
 
       - name: Enviar VPK como Artefato
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: jogo-psvita
           path: build/*.vpk
