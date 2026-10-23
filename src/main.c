@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
         }
         vglSwapBuffers(GL_FALSE);
     }
-    vglEnd();
+    glEnd();
     sceKernelExitProcess(0);
     return 0;
 }
