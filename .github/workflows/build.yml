@@ -15,9 +15,11 @@ jobs:
       - name: Baixar codigo fonte
         uses: actions/checkout@v4
 
-      - name: Instalar vitaGL
+      - name: Instalar dependencias VitaSDK
         run: |
-          vdpm vitaGL || vdpm vitasdk-vitagl || pacman -Syu --noconfirm arm-vita-eabi-vitagl || true
+          vdpm vitaGL || true
+          vdpm vitashark || true
+          vdpm mathneon || true
 
       - name: Compilar VPK
         run: |
