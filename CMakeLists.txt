@@ -11,10 +11,12 @@ target_link_libraries(gow_3d_demake
     vitashark
     SceGxm_stub 
     SceShaccCg_stub 
+    SceShaccCgExt_stub
     SceDisplay_stub 
     SceCtrl_stub 
     SceAppMgr_stub 
     SceCommonDialog_stub
+    SceKernelDmac_stub
     stdc++ 
     m 
     c
