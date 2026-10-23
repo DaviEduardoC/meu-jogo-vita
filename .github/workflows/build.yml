@@ -15,24 +15,22 @@ jobs:
       - name: Baixar codigo fonte
         uses: actions/checkout@v4
 
-      - name: Instalar vitaGL do Zero
+      - name: Compilar e Instalar vitaGL
         run: |
-          export VITASDK=/usr/local/vitasdk
-          export PATH=$VITASDK/bin:$PATH
           git clone https://github.com/Rinnegatamante/vitaGL.git
           cd vitaGL
           mkdir -p build
           cd build
-          cmake -DCMAKE_TOOLCHAIN_FILE=$VITASDK/share/vita.toolchain.cmake ..
+          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/local/vitasdk/share/vita.toolchain.cmake ..
+          make
           make install
+          cd ../..
 
-      - name: Compilar VPK do Jogo
+      - name: Compilar Jogo VPK
         run: |
-          export VITASDK=/usr/local/vitasdk
-          export PATH=$VITASDK/bin:$PATH
           mkdir -p build
           cd build
-          cmake -DCMAKE_TOOLCHAIN_FILE=$VITASDK/share/vita.toolchain.cmake ..
+          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/local/vitasdk/share/vita.toolchain.cmake ..
           make
 
       - name: Enviar VPK como Artefato
