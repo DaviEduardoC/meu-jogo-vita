@@ -1,8 +1,9 @@
-name: Criar VPK para PS Vita
+
+name: Build PS Vita
 
 on:
   push:
-    branches: [ "principal", "main" ]
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -11,26 +12,94 @@ jobs:
     container:
       image: vitasdk/vitasdk:latest
 
+    env:
+      VITASDK: /usr/local/vitasdk
+
     steps:
-      - name: Baixar codigo fonte
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Atualizar e Instalar dependencias VitaSDK
+      - name: Configure environment
+        shell: bash
         run: |
-          vdpm update
-          vdpm vitaGL || true
-          vdpm vitashark || true
-          vdpm mathneon || true
+          set -euxo pipefail
 
-      - name: Compilar VPK
+          echo "$VITASDK/bin" >> "$GITHUB_PATH"
+          export PATH="$VITASDK/bin:$PATH"
+
+          if ! command -v arm-vita-eabi-gcc >/dev/null 2>&1; then
+            echo "VitaSDK compiler not found."
+            echo "VITASDK=$VITASDK"
+            find / -name arm-vita-eabi-gcc -type f 2>/dev/null | head
+            exit 1
+          fi
+
+          echo "Compiler:"
+          arm-vita-eabi-gcc --version
+
+          echo "SDK:"
+          echo "${VITASDK}"
+
+          command -v vdpm
+
+      - name: Update VitaSDK packages
+        shell: bash
         run: |
-          mkdir -p build
-          cd build
-          cmake -DCMAKE_TOOLCHAIN_FILE=$VITASDK/share/vita.toolchain.cmake ..
-          make
+          set -euxo pipefail
 
-      - name: Enviar VPK como Artefato
+          vdpm upgrade
+          vdpm install vitaGL vitaShaRK libmathneon SceShaccCgExt
+
+      - name: Verify libraries
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          LIB="$VITASDK/arm-vita-eabi/lib"
+
+          for lib in \
+            libvitaGL.a \
+            libvitashark.a \
+            libmathneon.a \
+            libSceShaccCgExt.a
+          do
+            if [ ! -f "$LIB/$lib" ]; then
+              echo "Missing library: $LIB/$lib"
+              exit 1
+            fi
+          done
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          cmake -S . -B build \
+            -DCMAKE_TOOLCHAIN_FILE="$VITASDK/share/vita.toolchain.cmake" \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compile
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cmake --build build --parallel 2
+
+      - name: Find VPK
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          find . -type f -name '*.vpk' -print
+
+          if ! find . -type f -name '*.vpk' -print -quit | grep -q .; then
+            echo "Build completed without producing a VPK."
+            exit 1
+          fi
+
+      - name: Upload VPK
         uses: actions/upload-artifact@v4
         with:
-          name: jogo-psvita
-          path: build/*.vpk
+          name: god-of-war-psvita
+          path: "**/*.vpk"
+          if-no-files-found: error
+
