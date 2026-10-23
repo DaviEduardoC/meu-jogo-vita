@@ -1,13 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(gow_3d_demake)
 
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  if(DEFINED ENV{VITASDK})
-    set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
-  endif()
-endif()
-
-include($ENV{VITASDK}/share/vita.cmake REQUIRED)
+set(CMAKE_TOOLCHAIN_FILE "/usr/local/vitasdk/share/vita.toolchain.cmake")
+include("/usr/local/vitasdk/share/vita.cmake")
 
 set(VITA_APP_NAME "GOW 3D Demake")
 set(VITA_TITLEID  "GOW3D0001")
