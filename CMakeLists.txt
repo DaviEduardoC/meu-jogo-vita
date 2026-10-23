@@ -8,12 +8,11 @@ add_executable(gow_3d_demake src/main.c)
 target_link_libraries(gow_3d_demake 
     vitaGL 
     SceGxm_stub 
-    share 
+    shark 
     SceShaccCg_stub 
     SceDisplay_stub 
     SceCtrl_stub 
     SceAppMgr_stub 
-    SceKernel_stub 
     stdc++ 
     m 
     c
