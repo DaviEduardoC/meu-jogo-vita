@@ -6,6 +6,7 @@ include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
 add_executable(gow_3d_demake src/main.c)
 
 target_link_libraries(gow_3d_demake 
+    -Wl,--start-group
     vitaGL 
     vitashark
     SceGxm_stub 
@@ -17,6 +18,7 @@ target_link_libraries(gow_3d_demake
     stdc++ 
     m 
     c
+    -Wl,--end-group
 )
 
 vita_create_vpk(gow_3d_demake GOW3D0001 "GOW 3D Demake")
