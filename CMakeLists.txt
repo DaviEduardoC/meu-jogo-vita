@@ -14,7 +14,6 @@ target_link_libraries(gow_3d_demake
     SceCtrl_stub 
     SceAppMgr_stub 
     SceCommonDialog_stub
-    SceDmac_stub
     stdc++ 
     m 
     c
