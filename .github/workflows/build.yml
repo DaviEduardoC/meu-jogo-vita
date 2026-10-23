@@ -15,22 +15,15 @@ jobs:
       - name: Baixar codigo fonte
         uses: actions/checkout@v4
 
-      - name: Compilar e Instalar vitaGL
+      - name: Instalar vitaGL com vdpm
         run: |
-          git clone https://github.com/Rinnegatamante/vitaGL.git
-          cd vitaGL
-          mkdir -p build
-          cd build
-          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/local/vitasdk/share/vita.toolchain.cmake ..
-          make
-          make install
-          cd ../..
+          vdpm vitagl
 
-      - name: Compilar Jogo VPK
+      - name: Compilar VPK
         run: |
           mkdir -p build
           cd build
-          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/local/vitasdk/share/vita.toolchain.cmake ..
+          cmake -DCMAKE_TOOLCHAIN_FILE=$VITASDK/share/vita.toolchain.cmake ..
           make
 
       - name: Enviar VPK como Artefato
